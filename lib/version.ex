@@ -4,7 +4,7 @@ defmodule PaperTrail.Version do
   import Ecto.Changeset
   import Ecto.Query
   @primary_key {:id, :binary_id, autogenerate: true}
-  
+
   # @setter PaperTrail.RepoClient.originator()
   # @item_type Application.get_env(:paper_trail, :item_type, :integer)
   # @originator_type Application.get_env(:paper_trail, :originator_type, :integer)
@@ -12,9 +12,9 @@ defmodule PaperTrail.Version do
   schema "versions" do
     field(:event, :string)
     field(:item_type, :string)
-    field(:item_id, Application.get_env(:paper_trail, :item_type, :integer))
+    field(:item_id, Ecto.UUID)
     field(:item_changes, :map)
-    field(:originator_id, Application.get_env(:paper_trail, :originator_type, :integer))
+    field(:originator_id, Ecto.UUID)
     field(:origin, :string, read_after_writes: true)
     field(:meta, :map)
 
@@ -24,7 +24,7 @@ defmodule PaperTrail.Version do
         PaperTrail.RepoClient.originator()[:model],
         define_field: false,
         foreign_key: :originator_id,
-        type: Application.get_env(:paper_trail, :originator_type, :integer)
+        type: Ecto.UUID
       )
     end
 
